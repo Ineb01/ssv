@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  mariadb:
+    image: mariadb:10.7
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mariadb/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_PASSWORD=4321
+      - MYSQL_USER=dbuser
+      - MYSQL_DATABASE=django
+  userService:
+    image: userservice
+    build:
+      context: userService
+    environment:
+      - DB_USER=dbuser
+      - DB_NAME=data
+      - DB_PW=4321
+      - DB_HOST=mariadb
+      - SUPERUSER_UN=djangosuperuser
+      - SUPERUSER_PW=1234abcd
+    depends_on:
+      - mariadb
+    ports:
+      - 8081:8081
