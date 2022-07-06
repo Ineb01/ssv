@@ -11,6 +11,16 @@ services:
       - MYSQL_PASSWORD=4321
       - MYSQL_USER=dbuser
       - MYSQL_DATABASE=django
+
+  nginx-proxy:
+    image: nginx:latest
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+
   userService:
     image: userservice
     build:
