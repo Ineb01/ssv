@@ -1,21 +1,35 @@
 import Login from './components/Login'
-import User from './components/User'
-import { Button } from '@material-ui/core'
-import { useState } from 'react';
+import Homepage from './components/Homepage'
+import Register from './components/Register'
+import Header from './components/Header';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Buffer } from "buffer";
 
+import { lightBlue, deepPurple } from '@mui/material/colors';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme(
+  {
+    palette: {
+      primary: lightBlue,
+      secondary: lightBlue,
+      text: deepPurple,
+    },
+  }
+  )
+  
 function App() {
-  let [jwt, setJwt] = useState({ refresh: '', access: '' });
-  let [userID, setUserID] = useState(0);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login setJwt={setJwt} setUserID={setUserID}/>} />
-        <Route path="/profile" element={<User jwt={jwt} userID={userID}/>}/>
-        <Route path="/" element={<h1>User:{userID}</h1>} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Header/>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login/>} />
+          <Route path="/" element={<Homepage/>} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

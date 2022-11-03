@@ -1,15 +1,18 @@
 import { Container, OutlinedInput, InputLabel, Button, InputAdornment, IconButton, FormControl, Alert, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { useNavigate, Link } from 'react-router-dom'; 
 
-function Login(prop) {
+function Register(prop) {
     let navigate = useNavigate();
     const [values, setValues] = useState({
+        first_name: '',
+        last_name: '',
         username: '',
         password: '',
+        email: '',
         showPassword: false,
-        error: false
+        error: null
     });
 
     const handleChange = (prop) => (event) => {
@@ -26,13 +29,37 @@ function Login(prop) {
 
     return (
         <Container maxWidth="xs" style={{ marginTop: '20vh' }}>
-            {values.error?<Alert severity="error">Enter a correct Username and Password</Alert>:<></>}
+            {values.error!=null?<Alert style={{ width: '88%', margin: '2%' }} severity="error">{values.error}</Alert>:<></>}
             <FormControl fullWidth variant="outlined">
                 <InputLabel htmlFor="username">Username</InputLabel>
                 <OutlinedInput
                     id="username"
                     style={{ width: '96%', margin: '2%' }}
                     onChange={handleChange('username')}
+                />
+            </FormControl>
+            <FormControl fullWidth variant="outlined">
+                <InputLabel htmlFor="first_name">First name</InputLabel>
+                <OutlinedInput
+                    id="first_name"
+                    style={{ width: '96%', margin: '2%' }}
+                    onChange={handleChange('first_name')}
+                />
+            </FormControl>
+            <FormControl fullWidth variant="outlined">
+                <InputLabel htmlFor="last_name">Last name</InputLabel>
+                <OutlinedInput
+                    id="last_name"
+                    style={{ width: '96%', margin: '2%' }}
+                    onChange={handleChange('last_name')}
+                />
+            </FormControl>
+            <FormControl fullWidth variant="outlined">
+                <InputLabel htmlFor="email">E-mail</InputLabel>
+                <OutlinedInput
+                    id="email"
+                    style={{ width: '96%', margin: '2%' }}
+                    onChange={handleChange('email')}
                 />
             </FormControl>
             <FormControl fullWidth variant="outlined">
@@ -72,27 +99,31 @@ function Login(prop) {
                         redirect: 'follow'
                     };
 
-                    fetch("/users/token/", requestOptions)
+                    let terror=false
+                    fetch("/users/", requestOptions)
                         .then(response => {
-                            if(response.status != 200)
-                            throw new Error("login failed!");
+                            terror = response.status != 201;
                             return response.text()
                         })
                         .then(result => {
-                            localStorage.setItem('jwt', result);
-                            navigate("/", { replace: true });
+                            if(terror)
+                                throw new Error(result);
+                            else
+                                navigate("/", { replace: true });
                         })
                         .catch(error => {
-                            console.log('error', error);
-                            setValues({...values, error:true});
+                            let err = JSON.parse(error.message)
+                            let key = Object.keys(err)[0]
+                            let tex = err[key]
+                            setValues({...values, error:`${key}: ${tex}`});
                         });
                 }}
             >
-                Login
+                Register
             </Button>
-            <Link to={"/register"}><Typography style={{ width: '96%', margin: '2%' }}>Don't have an account?</Typography></Link>
+            <Link to={"/login"}><Typography style={{ width: '96%', margin: '2%' }}>Already have an account?</Typography></Link>
         </Container>
     );
 }
 
-export default Login;
+export default Register;
