@@ -80,10 +80,10 @@ import os
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PW'),
-        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DBS_NAME'),
+        'USER': os.environ.get('DBS_USER'),
+        'PASSWORD': os.environ.get('DBS_PW'),
+        'HOST': os.environ.get('DBS_HOST'),
         'PORT': '',
     }
 }
