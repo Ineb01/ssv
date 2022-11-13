@@ -13,7 +13,7 @@ function Header(prop){
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to={"/"} style={{ textDecoration: "none",  color: theme.palette.text.primary}}>
-              HIP
+              SSN
             </Link>
             </Typography>
             <LoginLogoutButton userData={prop.userData} logout={prop.reset}/>
